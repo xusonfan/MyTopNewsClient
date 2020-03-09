@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="收藏新闻"
+        android:id="@+id/keep_news"
+        app:showAsAction="never" />
+    <item
+        android:title="复制链接"
+        android:id="@+id/copy_link"
+        app:showAsAction="never" />
+    <item
+        android:title="跳转浏览器"
+        android:id="@+id/jumpToBrowser"
+        app:showAsAction="never" />
+    <item
+        android:title="分享新闻"
+        android:id="@+id/share"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/firstFragment"
+        android:icon="@drawable/ic_fiber_new_black_24dp"
+        android:title="新闻" />
+    <item
+        android:id="@+id/secondFragment"
+        android:icon="@drawable/ic_subscriptions_black_24dp"
+        android:title="订阅" />
+    <item
+        android:id="@+id/thirdFragment"
+        android:icon="@drawable/ic_sentiment_very_satisfied_black_24dp"
+        android:title="我的" />
+</menu>
