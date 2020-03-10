@@ -76,6 +76,7 @@ public class FirstFragment extends Fragment {
         return fragment;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +84,9 @@ public class FirstFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        //初始化消息
+        initNews();
 
 
     }
@@ -124,6 +128,8 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_first, container, false);
         mRecyclerView = view.findViewById(R.id.news_list_recycler_view);
@@ -135,10 +141,6 @@ public class FirstFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //初始化消息
-        initNews();
-
-
         //设置列表样式和数据
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
@@ -167,5 +169,9 @@ public class FirstFragment extends Fragment {
                 }
             }
         });
+
+
     }
+
+
 }

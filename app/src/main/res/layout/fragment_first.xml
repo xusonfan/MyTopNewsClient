@@ -5,6 +5,7 @@
     android:id="@+id/firstFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".fragments.FirstFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,8 @@
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="#009688"
+        android:fitsSystemWindows="true"
         android:paddingTop="5dp"
         android:paddingBottom="10dp"
         android:text="今日热文"
@@ -27,6 +30,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
