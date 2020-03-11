@@ -1,4 +1,4 @@
-package com.dyt.mytopnews.Util;
+package com.dyt.mytopnews.util;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

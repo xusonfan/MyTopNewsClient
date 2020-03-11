@@ -12,3 +12,5 @@
 /captures
 .externalNativeBuild
 .cxx
+libs/
+src/test/java/com/dyt/mytopnews/util/

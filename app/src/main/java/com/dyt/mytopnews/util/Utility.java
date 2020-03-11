@@ -1,4 +1,4 @@
-package com.dyt.mytopnews.Util;
+package com.dyt.mytopnews.util;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -6,6 +6,10 @@ import android.preference.PreferenceManager;
 import com.dyt.mytopnews.MyApplication;
 import com.dyt.mytopnews.gson.News;
 import com.google.gson.Gson;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Utility {
     public static final String TAG = "Utility";
@@ -42,12 +46,14 @@ public class Utility {
         edit.apply();
     }
 
-    //将毫秒值转换为天数
-    public static int parseTimeToDay(Long time) {
-        long day = time / 1000 / 60 / 60 / 24;
-        String s = String.valueOf(day);
-        int i = Integer.parseInt(s);
-        return i;
-
+    //将秒值转换为与当前时间差
+    public static String parseTimeToDay(Long time) {
+        long now = System.currentTimeMillis();
+        long t = now - time * 1000L;
+        Date date = new Date(t);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm", Locale.CHINA);
+        return simpleDateFormat.format(date);
     }
+
+
 }

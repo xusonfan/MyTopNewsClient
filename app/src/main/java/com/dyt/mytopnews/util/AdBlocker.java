@@ -1,4 +1,4 @@
-package com.dyt.mytopnews.Util;
+package com.dyt.mytopnews.util;
 
 import android.content.Context;
 import android.net.Uri;

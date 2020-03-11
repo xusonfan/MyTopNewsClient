@@ -11,11 +11,11 @@ import android.widget.Toast;
 
 import com.dyt.mytopnews.MyApplication;
 import com.dyt.mytopnews.R;
-import com.dyt.mytopnews.Util.HttpUtils;
-import com.dyt.mytopnews.Util.Utility;
 import com.dyt.mytopnews.adapter.NewsListAdapter;
 import com.dyt.mytopnews.gson.Data;
 import com.dyt.mytopnews.gson.News;
+import com.dyt.mytopnews.util.HttpUtils;
+import com.dyt.mytopnews.util.Utility;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
@@ -38,21 +38,16 @@ import okhttp3.Response;
  * create an instance of this fragment.
  */
 public class FirstFragment extends Fragment {
-    public static final String address = "https://www.tophub.fun:8888/GetRandomInfo?is_follow=0&time=";
+    private static final String address = "https://www.tophub.fun:8888/GetRandomInfo?is_follow=0&time=";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "FirstFragment";
     private RecyclerView mRecyclerView;
     private TextView title;
     private BottomNavigationView mBottomNavigationView;
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private List<Data> mDataList = new ArrayList<>();
     private NewsListAdapter mAdapter;
-    private Integer pageNumber = 1;
+    private Integer pageNumber = 0;
 
     public FirstFragment() {
         // Required empty public constructor
@@ -68,30 +63,22 @@ public class FirstFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static FirstFragment newInstance(String param1, String param2) {
-        FirstFragment fragment = new FirstFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        return new FirstFragment();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         //初始化消息
-        initNews();
+        loadNews(pageNumber);
 
 
     }
 
-    private void initNews() {
+    //请求新闻的方法
+    private void loadNews(Integer pageNumber) {
         HttpUtils.getNewsList(address + pageNumber, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -110,9 +97,7 @@ public class FirstFragment extends Fragment {
                 Log.d(TAG, "onResponse: 返回的数据是：" + responseData);
                 News news = Utility.handleNewsResponse(responseData);
                 List<Data> dataList = news.getData();
-                for (Data data : dataList) {
-                    mDataList.add(data);
-                }
+                mDataList.addAll(dataList);
                 requireActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -161,10 +146,17 @@ public class FirstFragment extends Fragment {
         mRecyclerView.setOnScrollChangeListener(new RecyclerView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY - oldScrollY > 0){
+                if (scrollY - oldScrollY > 0) {
                     mBottomNavigationView.animate().translationY(mBottomNavigationView.getHeight()).setDuration(500).start();
                     Log.d(TAG, "onScrollChange: 滑动执行");
-                }else {
+                    //添加加载更多功能
+                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                    int position = manager.findLastVisibleItemPosition();
+                    int count = manager.getItemCount();
+                    if (position == count - 1) {
+                        loadNews(++pageNumber);
+                    }
+                } else {
                     mBottomNavigationView.animate().translationY(0).setDuration(500).start();
                 }
             }

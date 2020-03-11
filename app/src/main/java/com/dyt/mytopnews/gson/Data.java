@@ -3,14 +3,17 @@
  */
 package com.dyt.mytopnews.gson;
 
+import java.io.Serializable;
+
 /**
  * Auto-generated: 2019-11-24 19:17:24
  *
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-public class Data {
+public class Data implements Serializable {
 
+    private static final long serialVersionUID = -2264309095089454796L;
     private String CreateTime;
     private String Title;
     private String Url;

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.MutableContextWrapper;
 import android.webkit.WebView;
 
-import com.dyt.mytopnews.Util.AdBlocker;
+import com.dyt.mytopnews.util.AdBlocker;
 
 import org.litepal.LitePal;
 

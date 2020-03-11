@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dyt.mytopnews.R;
-import com.dyt.mytopnews.Util.AdBlocker;
+import com.dyt.mytopnews.util.AdBlocker;
 import com.dyt.mytopnews.widget.WebLayout;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.DefaultWebClient;
