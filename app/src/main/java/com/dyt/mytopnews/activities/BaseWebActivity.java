@@ -136,7 +136,7 @@ public class BaseWebActivity extends AppCompatActivity {
         //设置自适应网页
         WebSettings settings = mAgentWeb.getAgentWebSettings().getWebSettings();
         settings.setUseWideViewPort(true);
-        settings.setLoadWithOverviewMode(true);
+//        settings.setLoadWithOverviewMode(true);
         //mAgentWeb.getUrlLoader().loadUrl(getUrl());
 
         long n = System.currentTimeMillis();

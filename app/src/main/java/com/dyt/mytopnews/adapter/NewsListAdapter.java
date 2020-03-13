@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dyt.mytopnews.R;
@@ -48,7 +47,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         } else {
             final Data data = mDataList.get(position);
             //设置新闻序号
-            holder.news_id.setText(Integer.toString(position + 1));
+//            holder.news_id.setText(Integer.toString(position + 1));
             //设置标题
             String title = data.getTitle().trim().replaceAll(" ", "").replaceAll("\t", "");
             holder.news_title.setText(title);
@@ -58,7 +57,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             //格式化传入的时间,并设置时间
             long l = Long.parseLong(data.getCreateTime());
             String day = Utility.parseTimeToDay(l);
-            holder.news_createTime.setText(day + " 分钟前");
+            holder.news_createTime.setText(day);
 
 
             holder.news_title.setOnClickListener(new View.OnClickListener() {
@@ -71,16 +70,16 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
                     v.getContext().startActivity(intent);
                 }
             });
-            holder.go_to_detail_news.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), DetailPage.class);
-                    intent.putExtra("url", data.getUrl());
-                    intent.putExtra("title", data.getTitle());
-                    intent.putExtra("type", data.getType());
-                    v.getContext().startActivity(intent);
-                }
-            });
+//            holder.go_to_detail_news.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(v.getContext(), DetailPage.class);
+//                    intent.putExtra("url", data.getUrl());
+//                    intent.putExtra("title", data.getTitle());
+//                    intent.putExtra("type", data.getType());
+//                    v.getContext().startActivity(intent);
+//                }
+//            });
         }
 
     }
@@ -101,19 +100,19 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView news_id;
+        //        TextView news_id;
         TextView news_title;
         TextView news_createTime;
         TextView news_type;
-        ImageView go_to_detail_news;
+//        ImageView go_to_detail_news;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            news_id = itemView.findViewById(R.id.news_id);
+//            news_id = itemView.findViewById(R.id.news_id);
             news_title = itemView.findViewById(R.id.news_title);
             news_createTime = itemView.findViewById(R.id.news_createTime);
             news_type = itemView.findViewById(R.id.news_type);
-            go_to_detail_news = itemView.findViewById(R.id.go_to_detail_news);
+//            go_to_detail_news = itemView.findViewById(R.id.go_to_detail_news);
         }
     }
 }

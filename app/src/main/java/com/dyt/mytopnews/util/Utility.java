@@ -14,6 +14,7 @@ import java.util.Locale;
 public class Utility {
     public static final String TAG = "Utility";
 
+
     //处理返回的json字符串，转换为java对象
     public static News handleNewsResponse(String response) {
 
@@ -49,10 +50,16 @@ public class Utility {
     //将秒值转换为与当前时间差
     public static String parseTimeToDay(Long time) {
         long now = System.currentTimeMillis();
-        long t = now - time * 1000L;
+        long t = now - time * 1000L - 8 * 60 * 60 * 1000;
         Date date = new Date(t);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm", Locale.CHINA);
-        return simpleDateFormat.format(date);
+        if (t < 60 * 60 * 1000L) {
+            SimpleDateFormat format = new SimpleDateFormat("mm", Locale.CHINA);
+            return format.format(date) + " 分钟前";
+        } else {
+            SimpleDateFormat format = new SimpleDateFormat("HH", Locale.CHINA);
+            return format.format(date) + " 小时前";
+        }
+
     }
 
 

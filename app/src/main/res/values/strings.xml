@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">看新闻</string>
+    <string name="app_name">实时热榜</string>
     <string name="noted">说明</string>
     <string name="go_to_detail_news">go to detail news</string>
 

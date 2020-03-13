@@ -1,15 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/thirdFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
     tools:context=".fragments.ThirdFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:background="#009688"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:text="用户中心"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/ic_sentiment_very_satisfied_black_24dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        android:drawableStart="@drawable/ic_settings_black_24dp"
+        android:drawableEnd="@drawable/ic_arrow_forward_black_24dp"
+        android:drawablePadding="20dp"
+        android:padding="13dp"
+        android:text="软件设置"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:drawableStart="@drawable/ic_settings_black_24dp"
+        android:drawableEnd="@drawable/ic_arrow_forward_black_24dp"
+        android:drawablePadding="20dp"
+        android:padding="13dp"
+        android:text="软件设置"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:drawableStart="@drawable/ic_settings_black_24dp"
+        android:drawableEnd="@drawable/ic_arrow_forward_black_24dp"
+        android:drawablePadding="20dp"
+        android:padding="13dp"
+        android:text="软件设置"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:drawableStart="@drawable/ic_settings_black_24dp"
+        android:drawableEnd="@drawable/ic_arrow_forward_black_24dp"
+        android:drawablePadding="20dp"
+        android:padding="13dp"
+        android:text="软件设置"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+</LinearLayout>

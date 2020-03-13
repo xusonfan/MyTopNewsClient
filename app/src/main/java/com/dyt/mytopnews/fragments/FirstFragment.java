@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -21,12 +22,17 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -48,6 +54,10 @@ public class FirstFragment extends Fragment {
     private List<Data> mDataList = new ArrayList<>();
     private NewsListAdapter mAdapter;
     private Integer pageNumber = 0;
+    private LinearLayoutManager manager;
+    private boolean isLoading;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     public FirstFragment() {
         // Required empty public constructor
@@ -86,7 +96,8 @@ public class FirstFragment extends Fragment {
                     @Override
                     public void run() {
                         Toast.makeText(MyApplication.getContext(), "加载失败，请检查你的网络状态", Toast.LENGTH_SHORT).show();
-
+                        isLoading = false;
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }
@@ -103,6 +114,9 @@ public class FirstFragment extends Fragment {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
                         Toast.makeText(MyApplication.getContext(), "加载成功", Toast.LENGTH_SHORT).show();
+                        isLoading = false;
+                        mSwipeRefreshLayout.setRefreshing(false);
+
                     }
                 });
             }
@@ -118,6 +132,7 @@ public class FirstFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_first, container, false);
         mRecyclerView = view.findViewById(R.id.news_list_recycler_view);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
         title = view.findViewById(R.id.title);
         return view;
     }
@@ -143,18 +158,60 @@ public class FirstFragment extends Fragment {
 
         //设置底栏滚动自动隐藏
         mBottomNavigationView = requireActivity().findViewById(R.id.bottomNavigationView);
+        manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
         mRecyclerView.setOnScrollChangeListener(new RecyclerView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY - oldScrollY > 0) {
                     mBottomNavigationView.animate().translationY(mBottomNavigationView.getHeight()).setDuration(500).start();
-                    Log.d(TAG, "onScrollChange: 滑动执行");
+//                    Log.d(TAG, "onScrollChange: 滑动执行");
                     //添加加载更多功能
-                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                    int position = manager.findLastVisibleItemPosition();
+                    int lastItemPosition = manager.findLastVisibleItemPosition();
+                    Log.d(TAG, "onScrollChange: 最后一项位置" + lastItemPosition);
                     int count = manager.getItemCount();
-                    if (position == count - 1) {
+                    Log.d(TAG, "onScrollChange: 得到了列表数" + count);
+                    if (lastItemPosition == count - 1 & !isLoading) {
+                        isLoading = true;
                         loadNews(++pageNumber);
+                        Log.d(TAG, "onScrollChange: 加载的页面页数" + pageNumber);
+                    }
+
+                    //设置列表处于非顶端时底栏的图标置为刷新样式
+                    int firstItemPosition = manager.findFirstVisibleItemPosition();
+                    Log.d(TAG, "onScrollChange: 第一项的序号是" + firstItemPosition);
+                    if (firstItemPosition != 0 & !isLoading) {
+                        mBottomNavigationView
+                                .getMenu()
+                                .findItem(R.id.firstFragment)
+                                .setIcon(R.drawable.ic_refresh_black_24dp)
+                                .setTitle("刷新")
+                                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem item) {
+                                        mSwipeRefreshLayout.setRefreshing(true);
+                                        NavController controller = Navigation.findNavController(requireActivity(), R.id.nav_host);
+                                        controller.navigate(R.id.firstFragment);
+                                        if (item.getItemId() == R.id.firstFragment) {
+                                            Timer timer = new Timer();
+                                            timer.schedule(new TimerTask() {
+                                                @Override
+                                                public void run() {
+                                                    mDataList.clear();
+                                                    loadNews(pageNumber);
+                                                }
+                                            }, 1000);
+                                            mRecyclerView.scrollToPosition(0);
+                                            mBottomNavigationView
+                                                    .getMenu()
+                                                    .findItem(R.id.firstFragment)
+                                                    .setIcon(R.drawable.ic_fiber_new_black_24dp)
+                                                    .setTitle("新闻");
+                                            return true;
+                                        }
+                                        return true;
+                                    }
+                                });
+
                     }
                 } else {
                     mBottomNavigationView.animate().translationY(0).setDuration(500).start();
@@ -162,8 +219,23 @@ public class FirstFragment extends Fragment {
             }
         });
 
+        //设置下拉更新列表操作
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        mDataList.clear();
+                        loadNews(0);
+                    }
+                }, 1000);
+            }
+        });
 
     }
-
-
 }
+
+
+
