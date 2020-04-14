@@ -8,23 +8,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dyt.mytopnews.R;
-import com.dyt.mytopnews.util.AdBlocker;
 import com.dyt.mytopnews.widget.WebLayout;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.DefaultWebClient;
 import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.WebViewClient;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -47,8 +44,7 @@ public class BaseWebActivity extends AppCompatActivity {
     private TextView mTitleTextView;
     private AlertDialog mAlertDialog;
     private WebViewClient mWebViewClient = new WebViewClient() {
-        //去广告过滤
-        private Map<String, Boolean> loadedUrls = new HashMap<>();
+
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -60,24 +56,8 @@ public class BaseWebActivity extends AppCompatActivity {
             //do you  work
             Log.i("Info", "BaseWebActivity onPageStarted");
         }
-
-        @Nullable
-        @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-            String url = request.getUrl().toString();
-//            Log.d(TAG, "shouldInterceptRequest: 获取到的url:"+url);
-            boolean ad;
-            if (!loadedUrls.containsKey(url)) {
-                ad = AdBlocker.isAd(url);
-                loadedUrls.put(url, ad);
-//                Log.d(TAG, "shouldInterceptRequest: 执行了方法");
-            } else {
-                ad = loadedUrls.get(url);
-            }
-            return ad ? AdBlocker.createEmptyResource() : super.shouldInterceptRequest(view, request);
-        }
-
     };
+
 
     private WebChromeClient mWebChromeClient = new WebChromeClient() {
         @Override
@@ -93,6 +73,14 @@ public class BaseWebActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //设置透明状态栏
+        Window window = getWindow();
+        //After LOLLIPOP not translucent status bar
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //Then call setStatusBarColor.
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.webview_color));
 
         setContentView(R.layout.activity_web);
 
@@ -126,8 +114,7 @@ public class BaseWebActivity extends AppCompatActivity {
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK)
                 .setWebLayout(new WebLayout(this))
-
-                .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)//打开其他应用时，弹窗咨询用户是否前往其他应用
+                .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.DISALLOW)//打开其他应用时，弹窗咨询用户是否前往其他应用
                 .interceptUnkownUrl() //拦截找不到相关页面的Scheme
                 .createAgentWeb()
                 .ready()
@@ -136,6 +123,7 @@ public class BaseWebActivity extends AppCompatActivity {
         //设置自适应网页
         WebSettings settings = mAgentWeb.getAgentWebSettings().getWebSettings();
         settings.setUseWideViewPort(true);
+        settings.setBuiltInZoomControls(true);
 //        settings.setLoadWithOverviewMode(true);
         //mAgentWeb.getUrlLoader().loadUrl(getUrl());
 

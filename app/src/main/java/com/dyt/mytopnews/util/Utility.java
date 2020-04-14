@@ -1,15 +1,7 @@
 package com.dyt.mytopnews.util;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
-import com.dyt.mytopnews.MyApplication;
 import com.dyt.mytopnews.gson.News;
 import com.google.gson.Gson;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class Utility {
     public static final String TAG = "Utility";
@@ -29,35 +21,17 @@ public class Utility {
 
     }
 
-    //调取上次最后浏览的页面数，以便每次打开不会浏览重复内容
-    public static Integer getPageNumber() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
-        Integer lastPageNumber = preferences.getInt("lastPageNumber", 1);
-        if (lastPageNumber > 200) {
-            return 1;
-        }
-        return lastPageNumber;
-    }
-
-    //存储最后浏览的页码，以供调用
-    public static void setPageNumber(Integer pageNumber) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putInt("lastPageNumber", pageNumber);
-        edit.apply();
-    }
 
     //将秒值转换为与当前时间差
     public static String parseTimeToDay(Long time) {
         long now = System.currentTimeMillis();
-        long t = now - time * 1000L - 8 * 60 * 60 * 1000;
-        Date date = new Date(t);
-        if (t < 60 * 60 * 1000L) {
-            SimpleDateFormat format = new SimpleDateFormat("mm", Locale.CHINA);
-            return format.format(date) + " 分钟前";
+        long t = now - time * 1000L;
+        long duration = t / 1000 / 60;
+        if (duration < 60) {
+            return duration + " 分钟前";
         } else {
-            SimpleDateFormat format = new SimpleDateFormat("HH", Locale.CHINA);
-            return format.format(date) + " 小时前";
+            long hour = duration / 60;
+            return hour + " 小时前";
         }
 
     }
